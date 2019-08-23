@@ -7,7 +7,7 @@ import {
     GraphQLObjectType
 } from 'graphql';
 
-const RentalVehicle = new GraphQLObjectType({
+const RentalVehicleType = new GraphQLObjectType({
     name: 'RentalVehicle',
     description: 'RentalVehicle type definition',
     fields: () => ({
@@ -56,4 +56,4 @@ const RentalVehicle = new GraphQLObjectType({
     })
 });
 
-export { RentalVehicle };
+export default RentalVehicleType;
