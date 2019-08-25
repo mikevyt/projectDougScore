@@ -1,20 +1,14 @@
-// lib/app.ts
-import express = require('express');
-import graphqlHTTP from 'express-graphql';
-import schema from './graphql/schema';
+require('dotenv').config();
 
-// Create a new express application instance
-const app: express.Application = express();
+import { ApolloServer, gql } from 'apollo-server';
+import resolvers from './resolvers';
+import typeDefs from './typeDefs';
 
-app.use('/graphql', graphqlHTTP({
-    schema,
-    graphiql: true,
-}));
-
-app.use('/', function (req, res) {
-    res.json('Go to /graphql to test your queries and mutations!');
+const server = new ApolloServer({
+    typeDefs,
+    resolvers
 });
 
-const server = app.listen(3000, function () {
-    console.info(`Server listening on port 3000!`);
+server.listen().then(({ url }) => {
+    console.log(`Server listening at ${url}`);
 });
