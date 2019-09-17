@@ -22,7 +22,7 @@ export const vehicleQueries = {
     },
 
     async vehicle(_, args) {
-        const id: number = args.id;
+        const id: number = parseInt(args.id);
         const snapshot = await collection.where('id', '==', id).get();
         return (
             snapshot.docs.map(doc => doc.data())[0] ||
@@ -33,12 +33,33 @@ export const vehicleQueries = {
 
 export const vehicleMutations = {
     async createVehicle(_, args) {
-        await collection.doc(args.id).set(args); // TODO: Reconsider doc identifier
-        const id: number = args.id;
+        await collection.add(args);
+        const id: number = parseInt(args.id);
         const snapshot = await collection.where('id', '==', id).get();
         return (
             snapshot.docs.map(doc => doc.data())[0] ||
             new ValidationError('Vehicle not found')
         );
+    },
+    async updateVehicle(_, args) {
+        const id: number = parseInt(args.id);
+        const snapshot = await collection.where('id', '==', id).get();
+        if (!snapshot.length) {
+            return new ValidationError('ID not found');
+        }
+        return (
+            snapshot.docs.map(doc => doc.data())[0] ||
+            new ValidationError('Vehicle not found')
+        );
+        
+    },
+    async deleteVehicle(_, args) {
+        const id: number = parseInt(args.id);
+        const snapshot = await collection.where('id', '==', id).get();
+        snapshot.forEach(function(doc) {
+            doc.ref.delete();
+        });
+        const total = await collection.get();
+        return total.docs.map(doc => doc.data());
     }
 };

@@ -5,6 +5,7 @@ import VehicleType from './VehicleType';
 const typeDefs = [
     MutationType,
     QueryType,
-    VehicleType];
+    VehicleType
+];
 
 export default typeDefs;

@@ -6,7 +6,7 @@ const VehicleType = `
         model: String!
         color: String!
         rentalPrice: Float!
-        imageURL: String!
+        imageURL: String
         description: String
     }
 `;

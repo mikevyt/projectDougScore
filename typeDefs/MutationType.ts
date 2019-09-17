@@ -8,9 +8,22 @@ const MutationType = `
             model: String!
             color: String!
             rentalPrice: Float!
-            imageURL: String!
+            imageURL: String
             description: String
         ): Vehicle
+        
+        updateVehicle(
+            id: ID!
+            year: Int
+            make: String
+            model: String
+            color: String
+            rentalPrice: Float
+            imageURL: String
+            description: String
+        ): Vehicle
+        
+        deleteVehicle(id: ID!): Vehicle
     }
 `;
 
