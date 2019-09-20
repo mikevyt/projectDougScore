@@ -1,13 +1,14 @@
 const VehicleType = `
     type Vehicle {
-        id: ID!
+        licensePlate: String!
         year: Int!
         make: String!
         model: String!
         color: String!
         rentalPrice: Float!
-        imageURL: String
+        dougScore: Int!
         description: String
+        isDeleted: Boolean
     }
 `;
 

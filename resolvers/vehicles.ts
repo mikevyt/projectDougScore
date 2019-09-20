@@ -3,7 +3,7 @@ const firebase = require('firebase');
 require('firebase/firestore');
 
 firebase.initializeApp({
-    apiKey: process.env.FIREBASE_API_KEY,
+    apiKey: 'AIzaSyB3I8sBayixeR9yQFYLQML_5O6bGZqb0HI',
     projectId: 'projectdougscore'
 });
 
@@ -14,16 +14,15 @@ const collection = firebase.firestore().collection('vehicles');
 export const vehicleQueries = {
     async vehicles() {
         try {
-            const snapshot = await collection.get();
+            const snapshot = await collection.where('isDeleted', '==', false).get();
             return snapshot.docs.map(doc => doc.data());
         } catch (err) {
-            return new ApolloError('Cannot retrieve vehicles.');
+            return new ApolloError('Cannot retrieve vehicles');
         }
     },
 
     async vehicle(_, args) {
-        const id: number = parseInt(args.id);
-        const snapshot = await collection.where('id', '==', id).get();
+        const snapshot = await collection.where('licensePlate', '==', args.licensePlate).where('isDeleted', '==', false).get();
         return (
             snapshot.docs.map(doc => doc.data())[0] ||
             new ValidationError('Vehicle not found')
@@ -34,32 +33,36 @@ export const vehicleQueries = {
 export const vehicleMutations = {
     async createVehicle(_, args) {
         await collection.add(args);
-        const id: number = parseInt(args.id);
-        const snapshot = await collection.where('id', '==', id).get();
+        const snapshot = await collection.where('licensePlate', '==', args.licensePlate).where('isDeleted', '==', false).get();
         return (
             snapshot.docs.map(doc => doc.data())[0] ||
             new ValidationError('Vehicle not found')
         );
     },
+
     async updateVehicle(_, args) {
-        const id: number = parseInt(args.id);
-        const snapshot = await collection.where('id', '==', id).get();
-        if (!snapshot.length) {
-            return new ValidationError('ID not found');
-        }
+        const { licensePlate, ...newProperties } = args;
+        await collection.where('licensePlate', '==', licensePlate)
+        .get()
+        .then(
+            querySnapshot => querySnapshot.forEach(
+                doc => collection.doc(doc.id).update( {...newProperties} )
+            )
+        );
+
+        const snapshot = await collection.where('licensePlate', '==', licensePlate).where('isDeleted', '==', false).get()
         return (
             snapshot.docs.map(doc => doc.data())[0] ||
             new ValidationError('Vehicle not found')
         );
-        
     },
+
     async deleteVehicle(_, args) {
-        const id: number = parseInt(args.id);
-        const snapshot = await collection.where('id', '==', id).get();
-        snapshot.forEach(function(doc) {
-            doc.ref.delete();
+        const licensePlate: string = args.licensePlate
+        const snapshot = await collection.where('licensePlate', '==', licensePlate).get();
+        await snapshot.forEach(function(doc) {
+            collection.doc(doc.id).update({ isDeleted: true });
         });
-        const total = await collection.get();
-        return total.docs.map(doc => doc.data());
+        return `Vehicle '${licensePlate}' deleted`;
     }
 };

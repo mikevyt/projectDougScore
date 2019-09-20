@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 import { ApolloServer, gql } from 'apollo-server';
 import resolvers from './resolvers';
 import typeDefs from './typeDefs';

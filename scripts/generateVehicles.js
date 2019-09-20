@@ -70,6 +70,10 @@ function generateLicensePlate() {
     return `${text} ${number}`;
 }
 
+function getDougScore() {
+    return getRandRange(20, 50);
+}
+
 function generateRandomString(length){
     let randomString = '';
     let randomAscii;
@@ -81,10 +85,6 @@ function generateRandomString(length){
     }
     return randomString
 }
-// def generate_license_plate() -> str:
-//     text = "".join(random.choice(string.ascii_uppercase) for _ in range(4))
-//     number = random.randint(100, 999)
-//     return "{} {}".format(text, number)
 
 async function generateVehicles(amount) {
     for (var i = 0; i < amount; i++) {
@@ -93,6 +93,7 @@ async function generateVehicles(amount) {
         const price = getPrice();
         const [make, model] = getCar();
         const licensePlate = generateLicensePlate();
+        const dougScore = getDougScore();
         const description = `A ${year} ${color} ${make} ${model} with lp ${licensePlate}`;
 
         const data = {
@@ -103,10 +104,12 @@ async function generateVehicles(amount) {
             model,
             licensePlate,
             description,
+            dougScore,
+            isDeleted: false,
         }
 
         await collection.add(data);
     }
 }
 
-generateVehicles(10);
+generateVehicles(5);

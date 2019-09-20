@@ -2,28 +2,28 @@
 const MutationType = `
     type Mutation {
         createVehicle(
-            id: ID!
+            licensePlate: String!
             year: Int!
             make: String!
             model: String!
             color: String!
             rentalPrice: Float!
-            imageURL: String
+            dougScore: Int!
             description: String
         ): Vehicle
         
         updateVehicle(
-            id: ID!
+            licensePlate: String!
             year: Int
             make: String
             model: String
             color: String
             rentalPrice: Float
-            imageURL: String
+            dougScore: Int
             description: String
         ): Vehicle
         
-        deleteVehicle(id: ID!): Vehicle
+        deleteVehicle(licensePlate: String!): String
     }
 `;
 
