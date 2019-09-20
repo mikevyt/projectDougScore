@@ -27,12 +27,12 @@ Deletes the vehicle with the provided license plate.
 # Models
 
 ## Vehicle
-### licensePlate: String!
-### year: Int!
-### make: String!
-### model: String!
-### color: String!
-### rentalPrice: Float!
-### dougScore: Int!
-### description: String
-### isDeleted: Boolean
+#### licensePlate: String!
+#### year: Int!
+#### make: String!
+#### model: String!
+#### color: String!
+#### rentalPrice: Float!
+#### dougScore: Int!
+#### description: String
+#### isDeleted: Boolean
